@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menú</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .references {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h2>Menú Principal</h2>
+
+  <p><strong>Usuario conectado:</strong> <span id="usuario"></span></p>
+
+  <label>Dinero en cuenta:</label>
+  <h3 id="MiSaldo"></h3>
+
+  <div id="mensaje" class="alert alert-info text-center d-none"></div>
+
+  <hr>
+
+  <div class="references">
+    <button id="btnDepositar" class="btn btn-primary">Depositar</button>
+    <button id="btnRetirar" class="btn btn-warning">Retirar</button>
+    <button id="btnEnviar" class="btn btn-primary">Enviar Dinero</button>
+    <button id="btnMovimientos" class="btn btn-primary">Últimos Movimientos</button>
+  </div>
+
+  <hr>
+  <button id="btnCerrarSesion" class="btn btn-danger w-100">Cerrar sesión</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+  if (!localStorage.getItem("UsuarioActivo")) {
+    window.location.href = "Login.html";
+  }
+
+  $("#usuario").text(localStorage.getItem("UsuarioActivo"));
+
+  let saldo = localStorage.getItem("MiSaldo") || 60000;
+  localStorage.setItem("MiSaldo", saldo);
+  $("#MiSaldo").text("$" + saldo);
+
+  function redirigir(texto, destino) {
+    $("#mensaje").text(texto).removeClass("d-none");
+    setTimeout(function () {
+      window.location.href = destino;
+    }, 5000);
+  }
+
+  $("#btnDepositar").click(function () {
+    redirigir("Redirigiendo a Depositar...", "Deposit.html");
+  });
+
+  $("#btnRetirar").click(function () {
+    redirigir("Redirigiendo a Retirar dinero...", "Withdraw.html");
+  });
+
+  $("#btnEnviar").click(function () {
+    redirigir("Redirigiendo a Enviar Dinero...", "SendMoney.html");
+  });
+
+  $("#btnMovimientos").click(function () {
+    redirigir("Redirigiendo a Últimos Movimientos...", "Transactions.html");
+  });
+
+  $("#btnCerrarSesion").click(function () {
+    localStorage.removeItem("UsuarioActivo");
+    redirigir("Cerrando sesión...", "Login.html");
+  });
+
+});
+</script>
+</body>
+</html>
