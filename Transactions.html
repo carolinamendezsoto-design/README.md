@@ -62,7 +62,11 @@
 <script>
 $(document).ready(function () {
 
-  // Obtener movimientos guardados
+  // 🔐 CONTROL DE SESIÓN (AGREGADO)
+  if (!localStorage.getItem("UsuarioActivo")) {
+    window.location.href = "Login.html";
+  }
+
   let movimientos = JSON.parse(localStorage.getItem("Movimientos")) || [];
 
   function textoMovimiento(tipo) {

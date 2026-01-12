@@ -51,7 +51,6 @@
     Saldo actual: <span id="saldoActual"></span>
   </div>
 
-  <!-- MENSAJE -->
   <div id="alert-container"></div>
 
   <form id="withdrawForm">
@@ -75,7 +74,11 @@
 <script>
 $(document).ready(function () {
 
-  // Obtener saldo
+  // 🔐 CONTROL DE SESIÓN (AGREGADO)
+  if (!localStorage.getItem("UsuarioActivo")) {
+    window.location.href = "Login.html";
+  }
+
   let saldo = localStorage.getItem("MiSaldo");
 
   if (saldo === null) {
@@ -109,12 +112,10 @@ $(document).ready(function () {
       return;
     }
 
-    // Actualizar saldo
     saldoActual -= monto;
     localStorage.setItem("MiSaldo", saldoActual);
     $("#saldoActual").text("$" + saldoActual);
 
-    // Guardar movimiento (consigna)
     let movimientos = JSON.parse(localStorage.getItem("Movimientos")) || [];
     movimientos.push({
       fecha: new Date().toLocaleDateString(),
@@ -123,7 +124,6 @@ $(document).ready(function () {
     });
     localStorage.setItem("Movimientos", JSON.stringify(movimientos));
 
-    // Mensaje visible (sin alert)
     $("#alert-container").html(`
       <div class="alert alert-success text-center">
         Retiro realizado con éxito.<br>

@@ -94,7 +94,6 @@
     Enviar dinero
   </button>
 
-  <!-- MENSAJE -->
   <div id="mensajeExito" class="alert alert-success mt-3 text-center">
     Transferencia realizada con éxito.<br>
     Redirigiendo al menú en 5 segundos...
@@ -111,7 +110,11 @@
 <script>
 $(document).ready(function () {
 
-  // Abrir / cerrar modal
+  // 🔐 CONTROL DE SESIÓN (AGREGADO)
+  if (!localStorage.getItem("UsuarioActivo")) {
+    window.location.href = "Login.html";
+  }
+
   $("#btnAbrirModal").click(function () {
     $("#modal").fadeIn();
     $("body").css("overflow", "hidden");
@@ -122,7 +125,6 @@ $(document).ready(function () {
     $("body").css("overflow", "auto");
   });
 
-  // Guardar contacto
   $("#guardarContacto").click(function () {
     const nombre = $("#nombre").val();
     const cbu = $("#cbu").val();
@@ -148,14 +150,12 @@ $(document).ready(function () {
     $("input").val("");
   });
 
-  // Seleccionar contacto
   $(document).on("click", ".contacto", function () {
     $(".contacto").removeClass("contacto-seleccionado");
     $(this).addClass("contacto-seleccionado");
     $("#btnEnviarDinero").removeClass("d-none");
   });
 
-  // Buscar contacto
   $("#buscarContacto").on("keyup", function () {
     const texto = $(this).val().toLowerCase();
 
@@ -164,21 +164,18 @@ $(document).ready(function () {
     });
   });
 
-  // ENVÍO DE DINERO (corregido)
   $("#btnEnviarDinero").click(function () {
 
     let saldo = parseFloat(localStorage.getItem("MiSaldo"));
-    const monto = 1000; // simulación
+    const monto = 1000;
 
     if (saldo < monto) {
       return;
     }
 
-    // Actualizar saldo
     saldo -= monto;
     localStorage.setItem("MiSaldo", saldo);
 
-    // Guardar movimiento
     let movimientos = JSON.parse(localStorage.getItem("Movimientos")) || [];
     movimientos.push({
       fecha: new Date().toLocaleDateString(),
